@@ -1,0 +1,167 @@
+<br />
+
+
+<p id="notice"><%= notice %></p>
+
+
+<%- model_class = MyClass -%>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name("class name") %>:</strong></dt>
+  <dd><%= @my_class.name %></dd>
+  <dt><strong><%= model_class.human_attribute_name("class size") %>:</strong></dt>
+  <dd><%= @my_class.size %></dd>
+ 
+  <dt><strong><%= model_class.human_attribute_name("Add Subject:") %>:</strong></dt>
+  <% sub=Subject.all %>
+  <% classsubj=@my_class.subjects%>
+  <% allsub = sub.reject{ |s| classsubj.include? s } %>
+  <dd>
+    <%= select("subject_id", "subject", allsub.collect {|p| [ p.name, p.id ] },:prompt=>'Add Subject')  %>
+    </dd>
+</dl>
+
+
+<h4 class="text-center text-info">Class Details:</h4>
+
+<table class="table table-striped">
+  <tr>
+    <th>No.</th>
+    <th>Subject</th>
+    <th>Teacher</th>
+    <th>Action</th>
+    <th></th>
+  </tr>
+
+<% @my_class.subjects.each_with_index do |s,index| %>
+  <tr>
+    <%indexplusone = index + 1%>
+    <td><%= indexplusone %></td>
+    <td><%= s.name %></td>
+    <%#binding.pry%>   
+    <%@classteacher=MyClassTeacher.where(:subjectname=>s.name) rescue nil%>
+    <td><%@classteacher.each_with_index do |ct,index|%>
+         <%indexplusone = index + 1%>
+        <%= indexplusone %>)
+            <%= ct.teacher.name rescue nil%>
+            <%=link_to " * ",remove_teacher_my_classes_path(:classteacher=>ct) %>
+
+             <br />
+    <%end%></td>         
+
+      <%#binding.pry%>
+      <% #teacher=s.teachers %>
+      <% #steacher = teacher.reject{ |t| @classteacher.include? t } %>  
+      <!-- </td> -->
+    <td> <%= select(:teacher_id, :teacher, s.teachers.collect {|p| [ p.name, p.id]},{:prompt=>'Assign Teacher'}, {:class=>'teacher',:id=>"select_#{s.id}"}) %> </td>
+    <td><%= link_to 'Remove Subject', remove_subject_my_classes_path(:subject=>s,:myclass=>@my_class), :class => 'btn btn-mini btn-danger' %></td>
+  
+  </tr>
+<% end %>
+</table>
+
+
+<br />
+<% stud=Student.all %>
+<% classstudent=@my_class.students%>
+<% allstud = stud.reject{ |s| classstudent.include? s } %>
+
+<b>Add Student:</b> <%= select("student_id", "student", allstud.collect {|p| [ p.name, p.id ] },:prompt=>'Add Student')  %>
+<h4 class="text-center text-info">List Of Student:</h4>
+
+<%#@my_class.students.each_with_index  do |s,index|%>
+  <%#indexplusone = index + 1%>
+  <%#= indexplusone %>
+  <%#= s.name%>
+  <%#= link_to 'Remove student', remove_student_my_classes_path(:student=>s)  %><br />
+<%#end%>
+
+
+<%= form_for @my_class do |f| %>
+  <%= f.autocomplete_field :name, autocomplete_student_name_my_classes_path %> 
+<%end%>
+
+<%#= form_for @allstudent do |f| %>
+  <%#= f.autocomplete_field :name, autocomplete_student_name_my_classes_path %> 
+<%#end%>
+
+
+
+
+<%@my_class.students.each_with_index  do |s,index|%>
+  <dl class="dl-horizontal">
+    <dt><strong><%= model_class.human_attribute_name("No") %>:</strong></dt>
+    <%indexplusone = index + 1%>
+    <dd><%= indexplusone %></dd>
+    <dt><strong><%= model_class.human_attribute_name("Student Name") %>:</strong></dt>
+    <dd><%= s.name %></dd>
+    <dd><%= link_to 'Remove student', remove_student_my_classes_path(:student=>s) , :class => 'btn btn-mini btn-danger' %></dd>
+  </dl>
+<%end%>
+
+<%#= link_to 'Edit', edit_my_class_path(@my_class) %> 
+<%= link_to 'Back', my_classes_path , :class => 'btn'%>
+
+<script type="text/javascript">
+
+   $(".teacher").change(function(){
+        var getID = this.id.split("_");
+        //console.log(getID[1]);
+
+        var data ={"teacher": $("#"+this.id).val(),
+                 "subject": getID[1],
+                 "class":  <%=@my_class.id%>}; 
+      $.ajax({ 
+      url: '/my_classes/add_teacher',//'/assignteacher/add_teacher', 
+      type: 'post',
+      data: data,
+      success: function(data,event,xhr) {        
+      //window.location.href = '<%#=@location%>';
+          if(data.message)
+           {
+            //$(".errorMSGforteacher").html(data.message);
+            alert(data.message);
+           } 
+          else
+          {
+            window.location.href = '<%=@location%>';
+          //$(".errorMSGforteacher").html('Teacher successfully Added.');
+           }
+      }
+      });
+
+    });
+
+
+   $('#subject_id_subject').change(function(){
+
+      var data ={"subject":  $("#subject_id_subject").val(),
+                 "class":  <%=@my_class.id%>}; 
+      $.ajax({ 
+      url: '/my_classes/add_subject',//'/assignsubject/add_subject', 
+      type: 'post',
+      data: data,
+      success: function(data,event,xhr) {        
+       window.location.href = '<%=@location%>';
+      //$(".errorMSGforcntno").html('Subject successfully Added.');
+      }
+      });
+   });
+
+
+   $('#student_id_student').change(function(){
+
+      var data ={"student":  $("#student_id_student").val(),
+                 "class":  <%=@my_class.id%>};  
+      $.ajax({ 
+      url: '/my_classes/add_student',//'/assignstudent/add_student', 
+      type: 'post',
+      data: data,
+      success: function(data,event,xhr) {        
+       window.location.href = '<%=@location%>';
+      //$(".errorMSGforcntno").html('Subject successfully Added.');
+      }
+      });
+   });
+
+</script>

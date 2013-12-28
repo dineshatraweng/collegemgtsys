@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Collegemanagementsystem</title>
+  <%= stylesheet_link_tag :all %>
+  <%= javascript_include_tag :defaults %>
+  <%#= javascript_include_tag "bootstrap.js","bootstrap.min.js" %>
+  <%= javascript_include_tag "autocomplete-rails.js" %>
+  <%= csrf_meta_tag %>
+</head>
+<body>
+<br />
+&nbsp;&nbsp;<%= link_to '   Home  ', root_url, :class => 'btn btn-success' %>
+&nbsp;&nbsp;<%= link_to '   Student  ', students_path, :class => 'btn btn-success' %>
+&nbsp;&nbsp;<%= link_to '   Subject  ', subjects_path, :class => 'btn btn-success' %>
+&nbsp;&nbsp;<%= link_to '   Teacher  ', teachers_path, :class => 'btn btn-success' %>
+&nbsp;&nbsp;<%= link_to '   Class  ', my_classes_path, :class => 'btn btn-success' %>
+<br />
+ 
+<%= yield %>
+
+</body>
+</html>

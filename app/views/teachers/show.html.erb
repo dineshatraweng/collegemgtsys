@@ -1,0 +1,42 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @teacher.name %>
+</p>
+
+<p>
+  <b>Mob:</b>
+  <%= @teacher.mob %>
+</p>
+
+<p>
+  <b>Address:</b>
+  <%= @teacher.address %>
+</p>
+
+<dd><%= select("subject_id", "subject", Subject.all.collect {|p| [ p.name, p.id ] },:prompt=>'Add Subject')  %></dd>
+<dd id="errorMsg" class="errorMSGforcntno" style="color:red;"></dd>
+
+<%= link_to 'Edit', edit_teacher_path(@teacher) %> |
+<%= link_to 'Back', teachers_path %>
+
+<script type="text/javascript">
+
+
+   $('#subject_id_subject').change(function(){
+
+      var data ={"subject":  $("#subject_id_subject").val(),
+                 "teacher":  <%=@teacher.id%>}; 
+      $.ajax({ 
+      url: '/teachers/add_subject',//'/assignsubjecttotecher/add_subject', 
+      type: 'post',
+      data: data,
+      success: function(data,event,xhr) {        
+      //window.location.href = '<%#=@location%>';
+      $(".errorMSGforcntno").html('Subject successfully Added.');
+      }
+      });
+   });
+
+</script>

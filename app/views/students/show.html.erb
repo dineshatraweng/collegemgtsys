@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @student.name %>
+</p>
+
+<p>
+  <b>Mob:</b>
+  <%= @student.mob %>
+</p>
+
+<p>
+  <b>Address:</b>
+  <%= @student.address %>
+</p>
+
+<% allclass = MyClass.where('name!=?',@student.my_class.name) %>
+<dd><%= select("my_class_id", "my_class", allclass.collect {|p| [ p.name, p.id ] },:prompt=>'Add/Change Class')  %></dd>
+<dd id="errorMsg" class="errorMSGforcntno" style="color:red;"></dd>
+
+<%= link_to 'Edit', edit_student_path(@student) %> |
+<%= link_to 'Back', students_path %>
+
+<script type="text/javascript">
+
+
+   $('#my_class_id_my_class').change(function(){
+
+      var data ={"my_class":  $("#my_class_id_my_class").val(),
+                 "student":  <%=@student.id%>}; 
+      $.ajax({ 
+      url: '/students/add_my_class',//'/assignsubjecttotecher/add_subject', 
+      type: 'post',
+      data: data,
+      success: function(data,event,xhr) {        
+      //window.location.href = '<%#=@location%>';
+      $(".errorMSGforcntno").html('Class successfully Added/Changed.');
+      }
+      });
+   });
+
+</script>
+

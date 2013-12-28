@@ -1,0 +1,39 @@
+<h3 class="text-center text-info">Listing classes:</h3>
+
+<table class="table table-striped">
+  <tr>
+    <th>Name</th>
+    <th>Size</th>
+    <th>Subjects</th>
+    <th>Teachers</th>
+    <th></th>
+  </tr>
+
+<% @my_classes.each do |my_class| %>
+  <tr>
+    <td><%= my_class.name %></td>
+    <td><%= my_class.size %></td>
+    <%if my_class.subjects.present?%>
+    <td>
+        <%= select("subject_id", "subject", my_class.subjects.collect {|p| [ p.name, p.id ] },:prompt=>'Show Subjects')  %></td>
+    <%else%>
+    <td>Not Added yet</td>
+    <%end%>
+    <%if my_class.teachers.present?%>
+    <td>
+        <%= select("teacher_id", "teacher", my_class.teachers.collect {|p| [ p.name, p.id ] },:prompt=>'Show Teachers')  %></td>
+    <%else%>
+    <td>Not Added yet</td>
+    <%end%>
+    <td><%= link_to 'Add Subject/Teacher', my_class , :class => 'btn btn-success'%></td>
+    <td><%= link_to 'Edit', edit_my_class_path(my_class) , :class => 'btn btn-success'%></td>
+    <td><%= link_to 'Destroy', my_class, :confirm => 'Are you sure?', :method => :delete, :class => 'btn btn-warning' %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New My class', new_my_class_path , :class => 'btn btn-success'%>
+
+

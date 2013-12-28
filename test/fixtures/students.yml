@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  mob: 1
+  address: MyString
+  my_class_id: 1
+
+two:
+  name: MyString
+  mob: 1
+  address: MyString
+  my_class_id: 1

@@ -1,0 +1,36 @@
+<h1>Listing teachers</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Mob</th>
+    <th>Address</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @teachers.each do |teacher| %>
+  <tr>
+    <td><%= teacher.name %></td>
+    <td><%= teacher.mob %></td>
+    <td><%= teacher.address %></td>
+    <%if teacher.subjects.present?%>
+    <td>
+      <%#= teacher.subject.name %>
+      <%= select("subject_id","subject",teacher.subjects.collect{|s| [s.name, s.id]},:prompt=>'Show Subjects')%>
+      <%#= select("subject_id", "subject", my_class.subjects.collect {|p| [ p.name, p.id ] },:prompt=>'Show Subjects')  %></td>
+     </td>
+    <%else%>
+    <td>Not Added yet</td>
+    <%end%>
+    <td><%= link_to 'Add Subject', teacher %></td>
+    <td><%= link_to 'Edit', edit_teacher_path(teacher) %></td>
+    <td><%= link_to 'Destroy', teacher, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Teacher', new_teacher_path %>
