@@ -1,7 +1,7 @@
 class MyClass < ActiveRecord::Base
 
 	has_many :students, :dependent=> :destroy, :uniq => true
-    has_many :my_class_teachers
+  has_many :my_class_teachers
 	has_many :teachers, :through=>:my_class_teachers
 	has_and_belongs_to_many :subjects , :uniq => true
 

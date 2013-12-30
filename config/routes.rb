@@ -23,6 +23,7 @@ Collegemanagementsystem::Application.routes.draw do
       post :add_student
       post :add_teacher
       get :autocomplete_student_name
+      post :add_stud
     end
    end
 

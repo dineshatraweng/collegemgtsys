@@ -23,13 +23,24 @@ class MyClassesController < ApplicationController
     #redirect_to request.env["HTTP_REFERER"]    
   end
 
+
+  def add_stud
+      #binding.pry
+       stud_ids=params[:student][:id]
+       my_class=MyClass.find(params[:my_class])
+       stud_ids.each do |i|
+        student=Student.find(i)
+        my_class.students<< student
+        my_class.save
+       end
+       redirect_to :back
+  end
+
   def add_student
-    #binding.pry
     @class=MyClass.find(params[:class])
     @class.students<< Student.find(params[:student])
     @class.save
     @location=request.env["HTTP_REFERER"]
-    #redirect_to request.env["HTTP_REFERER"]    
   end  
 
   def add_teacher
@@ -83,7 +94,7 @@ class MyClassesController < ApplicationController
 
   def show
     @my_class = MyClass.find(params[:id])
-    @allstudent=Student.all
+    @student=Student.find(5)
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @my_class }
@@ -125,7 +136,6 @@ class MyClassesController < ApplicationController
   # PUT /my_classes/1.xml
   def update
     @my_class = MyClass.find(params[:id])
-
     respond_to do |format|
       if @my_class.update_attributes(params[:my_class])
         format.html { redirect_to(@my_class, :notice => 'My class was successfully updated.') }

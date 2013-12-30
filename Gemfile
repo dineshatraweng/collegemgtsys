@@ -17,6 +17,7 @@ gem 'anjlab-bootstrap-rails', :require => 'bootstrap-rails',
                           :branch => '3.0.0'
 
 gem 'pry'
+gem 'chosen-rails'
 
 gem "jquery-rails"
 gem 'rails3-jquery-autocomplete'

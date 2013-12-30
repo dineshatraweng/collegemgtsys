@@ -49,7 +49,6 @@
              <br />
     <%end%></td>         
 
-      <%#binding.pry%>
       <% #teacher=s.teachers %>
       <% #steacher = teacher.reject{ |t| @classteacher.include? t } %>  
       <!-- </td> -->
@@ -66,7 +65,7 @@
 <% classstudent=@my_class.students%>
 <% allstud = stud.reject{ |s| classstudent.include? s } %>
 
-<b>Add Student:</b> <%= select("student_id", "student", allstud.collect {|p| [ p.name, p.id ] },:prompt=>'Add Student')  %>
+<!-- <b>Add Student:</b> <%#= select("student_id", "student", allstud.collect {|p| [ p.name, p.id ] },:prompt=>'Add Student')  %> -->
 <h4 class="text-center text-info">List Of Student:</h4>
 
 <%#@my_class.students.each_with_index  do |s,index|%>
@@ -77,15 +76,17 @@
 <%#end%>
 
 
-<%= form_for @my_class do |f| %>
-  <%= f.autocomplete_field :name, autocomplete_student_name_my_classes_path %> 
-<%end%>
-
-<%#= form_for @allstudent do |f| %>
-  <%#= f.autocomplete_field :name, autocomplete_student_name_my_classes_path %> 
+<%#= form_for :allstudent,:url=>add_stud_my_classes_path(:my_class=>@my_class),:method=>:post do |f| %>
+  <%#= f.autocomplete_field :name, autocomplete_student_name_my_classes_path %>
+  <%#= f.submit "Add"%> 
 <%#end%>
 
-
+<%= form_for :student,:url=>add_stud_my_classes_path(:my_class=>@my_class),:method=>:post do |f|  %>
+  <%#= f.autocomplete_field :name, autocomplete_student_name_my_classes_path%>
+  <b>Add Student:</b>
+  <%= f.select :id, allstud.map { |u| [u.name, u.id] }, { :include_blank => true},{:class => "chosen-select", :multiple => true } %>  
+<%= f.submit "Add"%> 
+<%end%>
 
 
 <%@my_class.students.each_with_index  do |s,index|%>
@@ -103,6 +104,24 @@
 <%= link_to 'Back', my_classes_path , :class => 'btn'%>
 
 <script type="text/javascript">
+
+
+  $(function() {
+  return $('.chosen-select').chosen({
+    allow_single_deselect: true,
+    max_selected_options: 5,
+    no_results_text: 'No results matched',
+    width: '200px'
+   });
+  //$(".chosen-select").chosen({disable_search_threshold: 10});
+  //$(".chosen-select").chosen({no_results_text: "Oops, nothing found!"});
+  //$(".chosen-select").chosen({max_selected_options: 5});
+  //$(".chosen-select").chosen({width: "95%"});
+
+  });
+
+
+
 
    $(".teacher").change(function(){
         var getID = this.id.split("_");

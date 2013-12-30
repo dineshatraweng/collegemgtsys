@@ -14,8 +14,7 @@
   <b>Address:</b>
   <%= @student.address %>
 </p>
-
-<% allclass = MyClass.where('name!=?',@student.my_class.name) %>
+  <% allclass = MyClass.where('name!=?',@student.my_class.name) rescue MyClass.all%>
 <dd><%= select("my_class_id", "my_class", allclass.collect {|p| [ p.name, p.id ] },:prompt=>'Add/Change Class')  %></dd>
 <dd id="errorMsg" class="errorMSGforcntno" style="color:red;"></dd>
 
